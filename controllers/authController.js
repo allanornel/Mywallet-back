@@ -19,10 +19,9 @@ export async function login(req, res) {
     const user = await db.collection("users").findOne({ email });
     console.log(user);
     if (user && bcrypt.compareSync(password, user.password)) {
-      console.log("entrou");
       const token = uuid();
       await db.collection("sessions").insertOne({ userId: user._id, token });
-      res.status(200).send(token);
+      res.status(200).send({ token, name: user.name });
     } else {
       res.status(401).send("Email/Senha incorretas!");
     }
